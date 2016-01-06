@@ -1,0 +1,18 @@
+#!/usr/bin/expect -f
+
+set user [lindex $argv 0];
+set password [lindex $argv 1];
+set host [lindex $argv 2];
+set port [lindex $argv 3];
+
+set timeout 10
+# now sftp
+spawn sftp $user@$host
+match_max 100000
+expect "*?assword:*"
+# Send password aka $password
+send -- "$password\r"
+
+expect "sftp>"
+send -- "exit\r"
+expect eof
