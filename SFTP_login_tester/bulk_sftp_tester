@@ -1,40 +1,57 @@
 #!/bin/bash
 
+#Define SFTP SERVER:
 host=localhost
+#Define the file with the pair login,password
+list=list_accounts
 
 # log file
-log="connection_test.log"
+log="sftp_tester_status.log"
 if [ -f $log ];
-then
-    echo "Older file $log exists, removing and creating new..."
-    rm -rf $log
-    touch $log
+	then
+    	rm -rf $log
+    	touch $log
 else
-    echo "Creating log file"
-    touch $log
+	touch $log
 fi
 
 # running expect script.
 # arg 1 is user, arg 2 is pass, arg 3 is host
-
-
-for line in $(cat list_accounts)
+echo "---------------------"
+echo "SFTP Bulk Tester v0.1"
+echo "---------------------"
+echo "SFTP Server: $host"
+for line in $(cat list)
 do
 
-user=`echo $line | cut -d"," -f1`
-password=`echo $line | cut -d"," -f2`
-echo $user
-echo $password
+	user=`echo $line | cut -d"," -f1`
+	password=`echo $line | cut -d"," -f2`
 # running expect script.
 # arg 1 is user, arg 2 is pass, arg 3 is host 
-./sftp_expect $user $password $host  >> $log
+
+	log2="sftp_tester_temp.log"
+	if [ -f $log2 ];
+	then
+	    rm -rf $log2
+	    touch $log2
+	else
+	    touch $log2
+	fi
+	echo "Testing User:$user password:$password"
+	./sftp_expect $user $password $host >> $log2
+
 
 # checking log for connections 
-if grep --quiet logout $log; then
-    echo "$user [OK] connection successful" >> $log
-else
-    echo "$user [FAILED] connection failed" >> $log
-    exit 1
-fi
+	if grep --quiet "sftp> exit" $log2; then
+	    echo "$user [OK] connection successful" >> $log
+	else
+	    echo "$user [FAILED] connection failed" >> $log
+	fi
 
 done
+
+echo "---------------------"
+echo "Test Result:"
+cat $log
+
+exit 0
