@@ -9,6 +9,9 @@ set timeout 10
 # now sftp
 spawn sftp $user@$host
 match_max 100000
+
+expect "yes/no" {send --"yes\r"}
+
 expect "*?assword:*"
 # Send password aka $password
 send -- "$password\r"

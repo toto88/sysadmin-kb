@@ -4,7 +4,6 @@
 host=localhost
 #Define the file with the pair login,password
 list=list_accounts
-
 # log file
 log="sftp_tester_status.log"
 if [ -f $log ];
@@ -21,7 +20,7 @@ echo "---------------------"
 echo "SFTP Bulk Tester v0.1"
 echo "---------------------"
 echo "SFTP Server: $host"
-for line in $(cat list)
+for line in $(cat $list)
 do
 
 	user=`echo $line | cut -d"," -f1`
@@ -49,6 +48,7 @@ do
 	fi
 
 done
+rm $log2 -f
 
 echo "---------------------"
 echo "Test Result:"

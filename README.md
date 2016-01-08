@@ -6,4 +6,6 @@ Please feel free to contribute and share.
 * SSL certificate generator ( SAN and WildCard)
 * Port Simulation with C and Python
 * Test SFTP  with a bulk list of accounts
+* Add and Modify AD users with PowerShell
+
 
