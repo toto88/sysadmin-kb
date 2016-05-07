@@ -6,4 +6,4 @@ This is a simple tool to Deny SSH attack , the principe consists of:
 
 
 The tool steps is very simple and have any other features like ( fail2ban). 
-You could install it under a system that have customer support without any hurdle, because unlike Fail2ban there is no need to install 3rd repository.
+You could install it under a system that have customer support (i.e redhat ) without any hurdle, because unlike Fail2ban there is no need to install 3rd repository( i.e epel ).

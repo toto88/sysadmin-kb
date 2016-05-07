@@ -1,5 +1,5 @@
 # sysadmin-kb
-This is repo contains useful tools for SysAdmin. They may need this in their IT life.
+This repo contains useful tools for SysAdmin. They may need it in their IT life.
 Please feel free to contribute and share.
 
 ## Content:
@@ -9,7 +9,7 @@ Please feel free to contribute and share.
 * Add and Modify AD users with PowerShell
 * List process running for more 24 hours
 * SSH Deny (without 3rd party package)
-* Launch parallel SSH
+* Launch parallel SSH sessions
 * Ping Sweep (Subnet or range of addresses)
 
 
