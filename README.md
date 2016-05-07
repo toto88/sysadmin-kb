@@ -10,6 +10,7 @@ Please feel free to contribute and share.
 * List process running for more 24 hours
 * SSH Deny (without 3rd party package)
 * Launch parallel SSH
+* Ping Sweep (Subnet or range of addresses)
 
 
 
