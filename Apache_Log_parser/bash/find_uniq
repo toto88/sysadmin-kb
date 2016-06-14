@@ -1,0 +1,50 @@
+#!/bin/bash
+
+###############################################
+# This bash script gives an example on how to get a unique IP from a file using two methods :
+#        1. Oneline Command
+#        2. Using files
+###############################################
+
+#Example 1: in a simple oneline command
+
+awk '{print $1}' code_ip | sort | uniq
+
+
+
+
+#Example 2: Using files 
+
+
+#uniq IP will be stored into uniqip file,, hence we make sure it is flushed
+if [ -a /tmp/uniqip ]
+	then
+		> /tmp/uniqip
+	else	
+		touch /tmp/uniqip
+fi
+
+
+while read line
+do
+	ip=`awk '{print $1}' <<< $line`
+	exist=$(grep "$ip" /tmp/uniqip)
+
+	#check if the ip exist in the uniqip file by checking the output of $exist variable
+	if [ ! -n "$exist" ]
+		then
+			echo $ip >> /tmp/uniqip
+	fi
+done < code_ip
+
+
+
+######################
+#those two commands are just to show how to sort a file and count its number of lines:
+
+#Sort a  [same] file
+sort /tmp/uniqip -o /tmp/uniqip 
+
+#Count the number of lines in a file
+wc -l /tmp/uniqip
+

@@ -1,0 +1,67 @@
+#!/bin/bash
+
+
+###############################################
+# This bash script is for parsing Apache Log in order to :
+#        1. Output hosts that generated most connection
+#        2. Output hosts that received most connection
+#        3. Output a list of hosts that generated connection to a specific host in the last hour
+#        4. Output a list of hosts that received connection from a specific host in the last hour
+###############################################
+
+
+
+
+#host generated most connection
+m_gen_con_host=$(awk '{print $2}' testlog | sort | uniq -c | sort -nr | head -n1 | cut -d ' ' -f5)
+echo $m_gen_con_host
+
+#host received most connection
+m_rec_con_host=$(awk '{print $3}' testlog | sort | uniq -c | sort -nr | head -n1| cut -d ' ' -f5)
+echo $m_rec_con_host
+
+
+
+# We are going to get the last one hour timestamp by substracting ( minus 60 minutre) from the last timestamp in the logfile
+
+#last timestamp in the log
+lastdate=`tail -n1 testlog | awk '{print $1}' | sed  -e s/:/" "/ -e s%/%" "%g | date -f - +%s`
+
+#echo "Last enrty in log is : $(date --date="@$lastdate")"
+#last 1 Hour date in log will be: lastdate - hour
+lasthour=$(($lastdate - ( 60 * 60 )))
+echo $(date --date="@$lasthour")
+
+if [ -f -a /tmp/temp_host2hostparser ]
+	then 
+		> /tmp/temp_host2hostparser
+fi
+
+echo "Working ..."
+
+#We are going to create a new file that contains entries of last one hour
+while read line
+do
+	timestamp=`awk '{print $1}' <<< $line | sed  -e s/:/" "/ -e s%/%" "%g | date -f - +%s`
+	#echo $timestamp
+	if [ $timestamp -ge $lasthour ] && [ $timestamp -le $lastdate ]  
+		then
+		echo $line >> /tmp/temp_host2hostparser
+#	echo "I found : $(date --date="@$timestamp")"
+#	echo $timestamp ">" $lasthour
+	fi
+done < testlog  
+
+
+#output a list of hosts that received connection from a specific host in the last hour
+echo "The host $m_gen_con_host generated connection to the hosts below:"
+echo "Time(s)	Host"
+echo "--------------"
+grep "$m_gen_con_host" /tmp/temp_host2hostparser | awk '$2=$m_gen_con_host {print $3}' | sort | uniq -c | sort -nr
+
+
+#Output a list of hosts that generated connection to a specific host in the last hour
+echo "The host $m_rec_con_host received connection from the hosts below:"
+echo "Time(s)   Host"
+echo "--------------"
+grep "$m_rec_con_host" /tmp/temp_host2hostparser | awk '$3=$m_rec_con_host  {print $2}' | sort | uniq -c | sort -nr

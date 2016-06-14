@@ -1,0 +1,8 @@
+#!/bin/bash
+
+############################################################
+# This is a command line on how to input a file in a bash script
+###############################################################
+
+[ $# -ge 1 -a -f "$1" ] && input="$1" || input="-"
+cat $input
