@@ -13,7 +13,7 @@ Please feel free to contribute and share.
 * Launch parallel SSH sessions
 * Ping Sweep (Subnet or range of addresses)
 * Parse an Apache Log File with Python and Bash: find most generated/received connection by month, find uniq IP ...
-
+* Import/Export Datadog monitor
 
 
 

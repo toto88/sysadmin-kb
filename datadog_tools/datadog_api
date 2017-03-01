@@ -1,0 +1,32 @@
+from datadog import initialize, api
+
+# put below the api_key and app_key of the source datadog account
+
+account_src = {
+    'api_key': 'xxx',
+    'app_key': 'xxx'
+}
+
+# put below the api_key and app_key of the destination datadog account
+
+account_dest = {
+    'api_key': 'yyy',
+    'app_key': 'yyy'
+}
+
+
+initialize(**account_src)
+
+# put below the id of the monitor that you want to copy
+
+monitorid=xyz
+
+# Get a monitor's details
+mymonitor=api.Monitor.get(monitorid, group_states='all')
+print mymonitor
+
+initialize(**account_dest)
+print "copying"
+
+output=api.Monitor.create(type=mymonitor['type'], query=mymonitor['query'], name=mymonitor['name'], message=mymonitor['message'], tags=mymonitor['tags'], options=mymonitor['options'])
+print output
